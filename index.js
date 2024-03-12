@@ -75,7 +75,7 @@ async function sitemapsql(req, res) {
 
 		// クエリの実行と結果の取得
 		const resultPg = await pool.query(
-			"SELECT id FROM blog_posts WHERE DATE(updated_at AT TIME ZONE 'JST') = CURRENT_DATE;"
+			"SELECT id FROM blog_posts WHERE DATE(updated_at AT TIME ZONE 'JST') = CURRENT_DATE - 1 OR DATE(updated_at AT TIME ZONE 'JST') = CURRENT_DATE - 2;"
 		)
 		console.log(resultPg.rows) // PostgreSQLからのクエリ結果を表示
 		await pool.end() // プールの終了
@@ -84,7 +84,7 @@ async function sitemapsql(req, res) {
 		console.log(pgurls)
 		console.log(typeof pgurls)
 
-		// TODO ポストしたVercel PostgreSQLのSQLを引っ張ってくるSQLを作る → mysqlのデータとくっつけて、postのURLが先頭に来るようにする。 → Lambda.zipにしてアップロード
+		// TODO 前日・前々日データを含めるようにした -> Lambda.zipにしてアップロード
 
 		const [rows] = await connection.query('SELECT * FROM sitemapurl ORDER BY date DESC LIMIT 200')
 		let urls = rows.map((row) => 'https://www.otoku-deal.com/items/' + row.date + '/' + row.asin)
