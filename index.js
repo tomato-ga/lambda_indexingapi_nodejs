@@ -86,7 +86,7 @@ async function sitemapsql(req, res) {
 
 		// TODO 前日・前々日データを含めるようにした -> Lambda.zipにしてアップロード
 
-		const [rows] = await connection.query('SELECT * FROM sitemapurl ORDER BY date DESC LIMIT 200')
+		const [rows] = await connection.query('SELECT * FROM sitemapurl ORDER BY date DESC LIMIT 100')
 		let urls = rows.map((row) => 'https://www.otoku-deal.com/items/' + row.date + '/' + row.asin)
 
 		let allUrls = pgurls.concat(urls)
